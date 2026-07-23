@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday!</title>
+  
+  <!-- Canvas Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
+  <style>
+    /* Global Reset & Dark Theme */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #1b0228, #090010);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* 1. Black Overlay Screen (30 Seconds) */
+    #black-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000000;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 1;
+      transition: opacity 1.5s ease;
+    }
+
+    #black-screen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-text {
+      color: #bb86fc;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      animation: pulse 2s infinite;
+    }
+
+    /* 2. Birthday Card Styling */
+    .card-container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(187, 134, 252, 0.2);
+      border-radius: 20px;
+      padding: 40px 30px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(138, 43, 226, 0.3);
+      position: relative;
+      z-index: 10;
+    }
+
+    .title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #e0b0ff, #9b51e0, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+      text-shadow: 0 0 20px rgba(155, 81, 224, 0.5);
+    }
+
+    .message {
+      font-size: 1.1rem;
+      color: #d8c4f0;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    /* 3. Celebrate Button */
+    .celebrate-btn {
+      background: linear-gradient(135deg, #8a2be2, #4a00e0);
+      color: #ffffff;
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 15px 35px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .celebrate-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 0 30px rgba(187, 134, 252, 0.9);
+    }
+
+    .celebrate-btn:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Black Screen Overlay -->
+  <div id="black-screen">
+    <p class="loading-text">✨ Preparing your special surprise...</p>
+  </div>
+
+  <!-- Birthday Wish Content -->
+  <div class="card-container">
+    <h1 class="title">Happy Birthday! 🎉</h1>
+    <p class="message">
+      May your year ahead be filled with endless joy, unforgettable moments, and incredible success. 
+      Press the button below to start the celebration!
+    </p>
+    <button class="celebrate-btn" onclick="triggerPurpleGlitter()">Celebrate ✨</button>
+  </div>
+
+  <script>
+    // 1. Black Screen Delay (30 Seconds)
+    setTimeout(() => {
+      const blackScreen = document.getElementById('black-screen');
+      if (blackScreen) {
+        blackScreen.classList.add('fade-out');
+        setTimeout(() => {
+          blackScreen.style.display = 'none';
+        }, 1500); // Wait for fade transition to finish
+      }
+    }, 30000); // 30000 ms = 30 seconds
+
+    // 2. Purple Glitter & Confetti Burst Function
+    function triggerPurpleGlitter() {
+      // Purple, lavender, silver, and pink glitter colors
+      const glitterColors = ['#8a2be2', '#9b51e0', '#e0b0ff', '#ffffff', '#ff69b4'];
+
+      // Center explosion
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: glitterColors,
+        scalar: 1.2
+      });
+
+      // Side fireworks stream
+      const duration = 2.5 * 1000;
+      const animationEnd = Date.now() + duration;
+
+      const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        // Left side stream
+        confetti({
+          particleCount: 8,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0, y: 0.7 },
+          colors: glitterColors
+        });
+
+        // Right side stream
+        confetti({
+          particleCount: 8,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1, y: 0.7 },
+          colors: glitterColors
+        });
+      }, 150);
+    }
+  </script>
+</body>
+</html>
